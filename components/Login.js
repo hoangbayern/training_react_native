@@ -3,11 +3,12 @@ import { ScrollView, View, StyleSheet, Alert, ActivityIndicator } from 'react-na
 import { Input, Button, Text, Icon } from 'react-native-elements';
 import axios from 'axios';
 import { useAuth } from '../AuthContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { FormInput } from './CustomForm/FormInput';
 
 export default function Login({ navigation }) {
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -42,7 +43,7 @@ export default function Login({ navigation }) {
 
       if (response.status === 200) {
         login();
-        navigation.navigate('Home', {name: response.data.user.name});
+        navigation.navigate('Main', {user: response.data.user.name});
       } else {
         Alert.alert('Login Failed', response.message);
       }
@@ -55,73 +56,27 @@ export default function Login({ navigation }) {
   };
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <View style={styles.container}>
-        <Text h1 style={styles.title}>Login</Text>
-        <Input
-          placeholder="Email"
-          onChangeText={(text) => {
+    <SafeAreaView className="bg-blue-950 h-full">
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View className="w-full justify-center my-6 px-4">
+        <Text className="text-5xl mb-10 mt-10 text-white font-bold">Login</Text>
+        <FormInput title="Email" value={loginEmail} placeholder="Email" handleChangeText={(text) => {
             setLoginEmail(text);
             setEmailError('');
-          }}
-          value={loginEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          leftIcon={<Icon name='email' size={24} color='black' />}
-          inputContainerStyle={styles.inputContainer}
-          errorMessage={emailError}
-        />
-        <Input
-          placeholder="Password"
-          onChangeText={(text) => {
+          }} leftIcon={<Icon name='email' size={24} color='white' />} errorMessage={emailError}/>
+        <FormInput title="Password" value={loginPassword} placeholder="Password" handleChangeText={(text) => {
             setLoginPassword(text);
             setPasswordError('');
-          }}
-          value={loginPassword}
-          secureTextEntry={!showPassword}
-          autoCapitalize="none"
-          leftIcon={<Icon name='lock' size={24} color='black' />}
-          rightIcon={
-            <Icon
-              name={showPassword ? 'eye-off' : 'eye'}
-              type='ionicon'
-              size={24}
-              color='black'
-              onPress={() => setShowPassword(!showPassword)}
-            />
-          }
-          inputContainerStyle={styles.inputContainer}
-          errorMessage={passwordError}
-        />
+          }} leftIcon={<Icon name='lock' size={24} color='white' />} errorMessage={passwordError}/>
         <Button
+          style={{ borderRadius: 20 }}
           title="Login"
           onPress={handleLogin}
-          buttonStyle={styles.button}
           loading={loading}
           disabled={loading}
         />
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  title: {
-    fontSize: 32,
-    marginBottom: 20,
-  },
-  inputContainer: {
-    marginBottom: 20,
-  },
-  button: {
-    width: '100%',
-    backgroundColor: '#1877f2',
-    borderRadius: 20,
-  },
-});
