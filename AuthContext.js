@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { getUser } from './lib/appwrite';
+import axios from 'axios';
 
 // Tạo context
 const AuthContext = createContext();
@@ -6,19 +8,33 @@ const AuthContext = createContext();
 // Provider
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
 
-  // Đăng nhập
+  useEffect(() => {
+    getUser().then((response) => {
+        if (response) {
+            setIsLoggedIn(true);
+            setUser(response);
+        } else {
+            setIsLoggedIn(false);
+            setUser(null);
+        }
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+  });
+
   const login = () => {
     setIsLoggedIn(true);
   };
 
-  // Đăng xuất
   const logout = () => {
     setIsLoggedIn(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

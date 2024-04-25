@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { ScrollView, View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { ScrollView, View, StyleSheet, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Input, Button, Text, Icon } from 'react-native-elements';
 import axios from 'axios';
 import { useAuth } from '../AuthContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FormInput } from './CustomForm/FormInput';
+import { getUser, loginAuth } from '../lib/appwrite';
 
 export default function Login({ navigation }) {
   const [loginEmail, setLoginEmail] = useState('');
@@ -12,7 +13,7 @@ export default function Login({ navigation }) {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { setIsLoggedIn,login,setUser } = useAuth();
 
   const handleLogin = async () => {
     let isValid = true;
@@ -34,18 +35,15 @@ export default function Login({ navigation }) {
     setLoading(true);
 
     try {
-      const response = await axios.post('https://86x07hia9j.execute-api.us-east-1.amazonaws.com/Dev/login', {
-        username: loginEmail,
-        password: loginPassword
-      });
+      const response = await loginAuth(loginEmail, loginPassword);
+      const result = await getUser();
 
-      console.log('Login response:', response.data);
-
-      if (response.status === 200) {
+      console.log('Login response:', response);
+      if(response) {
+        setIsLoggedIn(true);
+        setUser(result);
         login();
-        navigation.navigate('Main', {user: response.data.user.name});
-      } else {
-        Alert.alert('Login Failed', response.message);
+        navigation.navigate('Main');
       }
     } catch (error) {
       console.error('Login error:', error.message);
@@ -53,6 +51,10 @@ export default function Login({ navigation }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSignUp = () => {
+    navigation.navigate('Register');
   };
 
   return (
@@ -75,6 +77,9 @@ export default function Login({ navigation }) {
           loading={loading}
           disabled={loading}
         />
+        <TouchableOpacity onPress={handleSignUp}>
+            <Text className="mt-8 text-white text-center">Don't have an account? <Text className="text-lime-700 text-base font-bold">Sign Up</Text></Text>
+          </TouchableOpacity>
       </View>
     </ScrollView>
     </SafeAreaView>

@@ -80,7 +80,6 @@ export default function TaskScreen({navigation, route}) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.userName}>Hi, assddd</Text>
       <View style={styles.contentBody}>
         <View style={styles.logout}>
           <Animated.Text style={styles.title}>Today's tasks</Animated.Text>
