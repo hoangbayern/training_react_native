@@ -72,7 +72,7 @@ export default function Register({ navigation }) {
         <FormInput title="Username" value={username} placeholder="Username" handleChangeText={(text) => {
             setUsername(text);
             setUserNameError('');
-          }} leftIcon={<Icon name='email' size={24} color='white' />} errorMessage={userNameError}/>
+          }} leftIcon={<Icon name='person' size={24} color='white' />} errorMessage={userNameError}/>
         <FormInput title="Email" value={loginEmail} placeholder="Email" handleChangeText={(text) => {
             setLoginEmail(text);
             setEmailError('');

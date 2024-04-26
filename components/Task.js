@@ -2,12 +2,12 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default function Task(props) {
+export default function Task({ tasks: { content } }) {
     return (
       <View style={styles.item}>
         <View style={styles.itemLeft}>
             <View style={styles.squareBT}></View>
-            <Text style={styles.text}>{props.text}</Text>
+            <Text style={styles.text}>{content}</Text>
         </View>
         <View style={styles.circleBT}></View>
       </View>

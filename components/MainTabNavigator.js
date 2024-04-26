@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeScreen from './HomeScreen';
 import TaskScreen from './TaskScreen';
+import ProfileScreen from './ProfileScreen';
 
 export default function MainTabNavigator() {
   const Tab = createBottomTabNavigator();
@@ -32,6 +33,16 @@ export default function MainTabNavigator() {
         }}
       />
       <Tab.Screen
+        name="AddPost"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: 'Add',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="plus-circle" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
         name="Task"
         component={TaskScreen}
         options={{
@@ -40,6 +51,16 @@ export default function MainTabNavigator() {
             <MaterialCommunityIcons name="bell" color={color} size={size} />
           ),
           tabBarBadge: 3,
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="account" color={color} size={32} />
+          ),
         }}
       />
       {/* Add more screens here if needed */}

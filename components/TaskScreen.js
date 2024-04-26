@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, TextInput, TouchableOpacity, Modal, ScrollView, Animated } from 'react-native';
-import { Swipeable } from 'react-native-gesture-handler';
+import { Swipeable, FlatList } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements';
 import Task from './Task';
 import { useAuth } from '../AuthContext';
+import { createTask, getAllTasks } from '../lib/appwrite';
 
 export default function TaskScreen({navigation, route}) {
   const [content, setContent] = useState('');
@@ -11,12 +12,26 @@ export default function TaskScreen({navigation, route}) {
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState('');
 
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   // const { name } = navigation.params;
 
-  const handleAdd = () => {
+  useEffect(() => {
+    fetchDataTask();
+  }, []);
+
+  const fetchDataTask = async () => {
+    try {
+        const res = await getAllTasks();
+        setListContent(res);
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  const handleAdd = async () => {
     if(content != '') {
-      setListContent([...listContent, content]);
+      const res = await createTask(content, user.$id);
+      fetchDataTask();
     }
     setContent('');
   }
@@ -36,6 +51,8 @@ export default function TaskScreen({navigation, route}) {
   const handleHideModal = () => {
     setShowModal(false);
   };
+
+
 
   const renderRightActions = (progress, dragX, index) => {
     return (
@@ -92,9 +109,8 @@ export default function TaskScreen({navigation, route}) {
           </View>
         </TouchableOpacity>
         </View>
-        <ScrollView style={styles.items}>
-          {listContent.map((item, index) => renderTaskItem(item, index))}
-        </ScrollView>
+        <FlatList 
+         data={listContent} renderItem={({item}) => ( <Task tasks={item}/> )} keyExtractor={(item) => item.$id}/>
       </View>
 
       <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.iptWrite}>
@@ -121,6 +137,7 @@ export default function TaskScreen({navigation, route}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#e3e3ff'
   },
   contentBody: {
     paddingTop: 30,
@@ -199,7 +216,8 @@ const styles = StyleSheet.create({
   logout: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 50
   },
   txtLogoutRadius: {
     

@@ -15,6 +15,11 @@ export default function Login({ navigation }) {
   const [loading, setLoading] = useState(false);
   const { setIsLoggedIn,login,setUser } = useAuth();
 
+
+  const resetData = () => {
+    setLoginPassword('');
+  };
+
   const handleLogin = async () => {
     let isValid = true;
 
@@ -37,13 +42,13 @@ export default function Login({ navigation }) {
     try {
       const response = await loginAuth(loginEmail, loginPassword);
       const result = await getUser();
-
       console.log('Login response:', response);
       if(response) {
         setIsLoggedIn(true);
         setUser(result);
         login();
         navigation.navigate('Main');
+        resetData();
       }
     } catch (error) {
       console.error('Login error:', error.message);
@@ -78,7 +83,7 @@ export default function Login({ navigation }) {
           disabled={loading}
         />
         <TouchableOpacity onPress={handleSignUp}>
-            <Text className="mt-8 text-white text-center">Don't have an account? <Text className="text-lime-700 text-base font-bold">Sign Up</Text></Text>
+            <Text className="mt-8 text-white text-center">Don't have an account? <Text className="text-lime-400 text-base font-bold">Sign Up</Text></Text>
           </TouchableOpacity>
       </View>
     </ScrollView>
