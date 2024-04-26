@@ -6,7 +6,7 @@ import { Icon } from 'react-native-elements';
 export const CardItem = ({ posts: {title, thumbnail, content, creator: { avatar, username }} }) => {
 
   return (
-    <View className="mt-8 flex-col items-center">
+    <View className="mt-3 flex-col items-center">
       <View className="w-full px-4 py-6 bg-white rounded-lg shadow-lg">
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
             <View style={{ flexDirection: 'row', alignItems: 'center'}}>

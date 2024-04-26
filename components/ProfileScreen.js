@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from 'react-native';
-import { launchImageLibrary } from 'react-native-image-picker';
+// import { launchImageLibrary } from 'react-native-image-picker';
 
 const ProfileScreen = () => {
   const [avatar, setAvatar] = useState(null);
@@ -9,15 +9,15 @@ const ProfileScreen = () => {
 
   // Hàm để mở thư viện ảnh và chọn ảnh
   const openImagePicker = (type) => {
-    launchImageLibrary({ mediaType: 'photo', selectionLimit: 1 }, (response) => {
-      if (!response.didCancel) {
-        if (type === 'avatar') {
-          setAvatar(response.assets[0].uri);
-        } else if (type === 'coverPhoto') {
-          setCoverPhoto(response.assets[0].uri);
-        }
-      }
-    });
+    // launchImageLibrary({ mediaType: 'photo', selectionLimit: 1 }, (response) => {
+    //   if (!response.didCancel) {
+    //     if (type === 'avatar') {
+    //       setAvatar(response.assets[0].uri);
+    //     } else if (type === 'coverPhoto') {
+    //       setCoverPhoto(response.assets[0].uri);
+    //     }
+    //   }
+    // });
   };
 
   useEffect(() => {
@@ -47,6 +47,7 @@ const ProfileScreen = () => {
         renderItem={({ item }) => (
           <View style={styles.postContainer}>
             <Text>{item.content}</Text>
+            <Text>Testststs</Text>
           </View>
         )}
       />

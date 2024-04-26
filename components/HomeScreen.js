@@ -5,6 +5,8 @@ import { FlatList } from 'react-native-gesture-handler';
 import { CardItem } from './CardItem';
 import { getAllPosts } from '../lib/appwrite';
 import { Avatar, Badge, Icon, withBadge } from '@rneui/themed';
+import ProfileScreen from './ProfileScreen';
+import StoryNews from './StoryNew';
 
 export default function HomeScreen({ navigation, route }) {
   const [dataPost, setDataPost] = useState([]);
@@ -47,6 +49,10 @@ export default function HomeScreen({ navigation, route }) {
                 containerStyle={{ position: 'absolute', top: 25, left: 24 }}
               />
             </View>
+          </View>
+          <View className="w-full pt-5">
+            <Text className="text-lg">Story News</Text>
+            <StoryNews />
           </View>
         </View>
   )}
