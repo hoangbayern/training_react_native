@@ -27,6 +27,12 @@ export default function HomeScreen({ navigation, route }) {
     }
   };
 
+  const data = [
+    {
+      url: 'https://cdn.pixabay.com/photo/2015/02/24/15/41/dog-647528_1280.jpg'
+    },
+  ];
+
   return (
     <SafeAreaView style={{ backgroundColor: '#e3e3ff' }}>
       <FlatList 
@@ -41,7 +47,7 @@ export default function HomeScreen({ navigation, route }) {
             <View>
               <Avatar
                 rounded
-                source={{ uri: user.avatar }}
+                source={{ uri: 'https://randomuser.me/api/portraits/men/36.jpg' }}
                 size="small"
               />
               <Badge

@@ -1,62 +1,58 @@
+// import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Button, View } from 'react-native';
+import { Video } from 'expo-av';
 import React from 'react';
-import { View, Image, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 
-const StoryItem = ({ imageUri, onPress }) => (
-  <TouchableOpacity onPress={onPress} style={styles.storyItem}>
-    <Image source={{ uri: imageUri }} style={styles.storyImage} />
-  </TouchableOpacity>
-);
-
-const StoryNews = () => {
-  const stories = [
-    { id: 1, imageUri: 'https://carebee-user-images-dev-dev.s3.ap-northeast-1.amazonaws.com/user_images/supporter/images/409fe62b-6aca-4dd0-b5a7-1f8fcc560b4ebg1.jpg' },
-    { id: 2, imageUri: 'https://carebee-user-images-dev-dev.s3.ap-northeast-1.amazonaws.com/user_images/supporter/images/409fe62b-6aca-4dd0-b5a7-1f8fcc560b4ebg1.jpg' },
-    { id: 3, imageUri: 'https://carebee-user-images-dev-dev.s3.ap-northeast-1.amazonaws.com/user_images/supporter/images/409fe62b-6aca-4dd0-b5a7-1f8fcc560b4ebg1.jpg' },
-    { id: 4, imageUri: 'https://carebee-user-images-dev-dev.s3.ap-northeast-1.amazonaws.com/user_images/supporter/images/409fe62b-6aca-4dd0-b5a7-1f8fcc560b4ebg1.jpg' },
-    { id: 5, imageUri: 'https://carebee-user-images-dev-dev.s3.ap-northeast-1.amazonaws.com/user_images/supporter/images/409fe62b-6aca-4dd0-b5a7-1f8fcc560b4ebg1.jpg' },
-  ];
-
-  const renderStoryItem = ({ item }) => (
-    <StoryItem imageUri={item.imageUri} onPress={() => console.log('Story', item.id)} />
-  );
+export default function StoryNews() {
+  const video = React.useRef(null);
+  const secondVideo = React.useRef(null);
+  const [status, setStatus] = React.useState({});
+  const [statusSecondVideo, setStatusSecondVideo] = React.useState({});
 
   return (
     <View style={styles.container}>
-      <View>
-        <FlatList
-          contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 20 }}
-          horizontal
-          data={stories}
-          renderItem={renderStoryItem}
-          keyExtractor={photo => photo.id}
-          showsHorizontalScrollIndicator={false}
-          legacyImplementation={false}
-          pagingEnabled={true}
-        />
+      <Video
+        ref={video}
+        style={styles.video}
+        source={{uri: "http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"}}
+        useNativeControls
+        resizeMode="contain"
+        isLooping
+        onPlaybackStatusUpdate={setStatus}
+      />
+      <View style={styles.buttons}>
+        <Button title="Play from 5s" onPress={() => video.current.playFromPositionAsync(5000)} />
+        <Button title={status.isLooping ? "Set to not loop" : "Set to loop"} onPress={() => video.current.setIsLoopingAsync(!status.isLooping)} />
       </View>
+      {/* <Video
+        ref={secondVideo}
+        style={styles.video}
+        source={{uri: "http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4"}}
+        useNativeControls
+        resizeMode="contain"
+        isLooping
+        onPlaybackStatusUpdate={setStatusSecondVideo}
+      />
+      <View style={styles.buttons}>
+        <Button title="Play from 50s" onPress={() => secondVideo.current.playFromPositionAsync(50000)} />
+        <Button title={statusSecondVideo.isLooping ? "Set to not loop" : "Set to loop"} onPress={() => secondVideo.current.setIsLoopingAsync(!statusSecondVideo.isLooping)} />
+      </View> */}
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 5,
-  },
-  storyItem: {
-    width: 100,
-    height: 170,
-    backgroundColor: '#ccc',
-    marginHorizontal: 5,
-    justifyContent: 'center',
+    backgroundColor: '#fff',
     alignItems: 'center',
-    borderRadius: 20,
-    overflow: 'hidden',
+    justifyContent: 'center',
   },
-  storyImage: {
-    width: '100%',
-    height: '100%',
+  video: {
+    flex: 1,
+    alignSelf: 'center'
   },
+  buttons: {
+    margin: 16
+  }
 });
-
-export default StoryNews;
